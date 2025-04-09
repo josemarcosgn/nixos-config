@@ -139,7 +139,8 @@
   # services.xserver.libinput.enable = true;
   
   # NTFS support
-  boot.supportedFilesystems = [ "ntfs" ]; 
+  boot.supportedFilesystems = [ "ntfs" ];
+  
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jose = {
@@ -170,6 +171,7 @@
     wget
     vlc
     telegram-desktop
+    ntfs3g
   ];
   
   # Exclde packages installed by default
