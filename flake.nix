@@ -23,3 +23,23 @@
     };
   };
 }
+
+
+  outputs = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations = {
+      desktop = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/desktop-x99/configuration.nix
+        ];
+      };
+
+      laptop = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/laptop-x550l/configuration.nix
+        ];
+      };
+    };
+  };
+}
