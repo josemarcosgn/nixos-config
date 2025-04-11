@@ -71,21 +71,4 @@
       ms-ceintl.vscode-language-pack-pt-br
     ];
   };
-  
-  programs.zsh = {
-    enable = true;
-    ohMyZsh = {
-      enable = true;
-      theme = "agnoster"; # You can change the theme here
-      plugins = [ "git" "sudo" "z" ];
-    };
-  };
-
-  # Set zsh as the default shell in Home Manager
-  programs.zsh.enableCompletion = true;
-  programs.zsh.enableAutosuggestions = true;
-  programs.zsh.enableSyntaxHighlighting = true;
-
-  # Optional: if you haven't set the default shell yet
-  home.shell = pkgs.zsh;
 }
