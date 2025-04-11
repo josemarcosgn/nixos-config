@@ -62,16 +62,19 @@
   environment.gnome.excludePackages = with pkgs; [
     baobab # disk usage analyzer
     epiphany # web browser
-    simple-scan # document scanner
-    totem # video player
-    yelp # help viewer
     evince # document viewer
     geary # email client
+    gnome-clocks
     gnome-contacts
     gnome-logs
     gnome-maps
     gnome-music
     gnome-shell-extensions
+    gnome-tour
+    gnome-weather
+    simple-scan # document scanner
+    totem # video player
+    yelp # help viewer
   ]; 
   
   # Hidden xterm ON app menu.
