@@ -73,6 +73,13 @@
     gnome-music
     gnome-shell-extensions
   ]; 
+  
+  # Hidden xterm on GNOME
+  environment.xdgApplications = [
+    {
+      name = "xterm";
+      hidden = true;
+    }
 
   # Configure keymap in X11
   services.xserver.xkb = {
