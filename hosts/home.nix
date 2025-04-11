@@ -70,25 +70,6 @@
     };
   };
   
-  programs.zsh = {
-    enable = true;
-    enableAutosuggestions = true;
-    shellAliases = {
-      v = "nvim";
-      ll = "ls -l";
-      ls = "exa";
-      la = "exa -a";
-      grep = "grep --color=auto";
-      cp = "cp -i";
-      mv = "mv -i";
-      rm = "rm -i";
-      g = "git";
-      gs = "git status";
-    };
-  };
-  
-  programs.zsh.shell = pkgs.zsh;
-  
   programs.git = {
     enable = true;
     userName  = "josemarcosgn";
@@ -101,5 +82,23 @@
     profiles.default.extensions = with pkgs.vscode-extensions; [
       ms-ceintl.vscode-language-pack-pt-br
     ];
+  };
+  
+  
+  programs.zsh = {
+    enable = true;
+    enableCompletions = true;
+    autosuggestions.enable = true;
+    syntaxHighlighting.enable = true;
+    shellAliases = {
+      ll = "ls -l";
+      update = "sudo nixos-rebuild switch";
+    };
+    history.size = 10000;
+    oh-my-zsh = {
+      enable = true;
+      plugins = [ "git" "thefuck" ];
+      theme = "robbyrussell";
+    };
   };
 }
