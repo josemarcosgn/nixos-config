@@ -1,0 +1,22 @@
+# nvidia-config.nix
+{ config, pkgs, ... }:
+
+{
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    prime = {
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:4:0:0";
+
+      offload.enable = true;
+      offload.enableOffloadCmd = true;
+    };
+
+    powerManagement.enable = false;
+    open = false;
+    nvidiaSettings = true;
+  };
+}
+
