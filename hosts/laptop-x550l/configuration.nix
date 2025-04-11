@@ -130,7 +130,7 @@
   users.users.jose = {
     isNormalUser = true;
     description = "Jose Marcos";
-    extraGroups = [ "networkmanager" "wheel" "adbusers" "docker" ]
+    extraGroups = [ "networkmanager" "wheel" "adbusers" "docker" ];
   };
 
   # Allow unfree packages
