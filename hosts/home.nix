@@ -16,6 +16,22 @@
 
   programs.home-manager.enable = true;
   
+  programs.zsh.enable = true;
+
+  home.packages = with pkgs; [
+    firefox
+    flatpak
+    gnome-software
+    scrcpy
+    hunspell
+    gsound
+    libgda6
+    vlc
+    wget
+    telegram-desktop
+    ntfs3g
+  ];
+  
   home.packages = with pkgs.gnomeExtensions; [
     blur-my-shell
     tiling-assistant
@@ -55,6 +71,23 @@
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = ["qemu:///system"];
       uris = ["qemu:///system"];
+    };
+  };
+  
+  programs.zsh = {
+    enable = true;
+    enableAutosuggestions = true;
+    shellAliases = {
+      v = "nvim";
+      ll = "ls -l";
+      ls = "exa";
+      la = "exa -a";
+      grep = "grep --color=auto";
+      cp = "cp -i";
+      mv = "mv -i";
+      rm = "rm -i";
+      g = "git";
+      gs = "git status";
     };
   };
   

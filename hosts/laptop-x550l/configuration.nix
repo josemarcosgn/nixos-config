@@ -131,19 +131,7 @@
     isNormalUser = true;
     description = "Jose Marcos";
     extraGroups = [ "networkmanager" "wheel" "adbusers" "docker" ];
-    packages = with pkgs; [
-    firefox
-    flatpak
-    gnome-software
-    scrcpy
-    hunspell
-    gsound
-    libgda6
-    vlc
-    wget
-    telegram-desktop
-    ntfs3g
-    ];
+    shell = pkgs.zsh; # Isso também pode ir pro home.nix, mas aqui já funciona.
   };
 
   # Allow unfree packages
