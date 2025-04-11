@@ -79,7 +79,7 @@
     {
       name = "xterm";
       hidden = true;
-    };
+    }
   ];
 
   # Configure keymap in X11
