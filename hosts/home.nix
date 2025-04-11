@@ -83,11 +83,11 @@
       mv = "mv -i";
       rm = "rm -i";
       g = "git";
-      gs = "git status";
+      gs = "git status"
     };
   };
   
-  programs.zsh.shell = pkgs.zsh
+  programs.zsh.shell = pkgs.zsh;
   
   programs.git = {
     enable = true;
