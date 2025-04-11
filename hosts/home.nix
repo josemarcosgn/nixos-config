@@ -87,6 +87,8 @@
     };
   };
   
+  programs.zsh.shell = pkgs.zsh
+  
   programs.git = {
     enable = true;
     userName  = "josemarcosgn";

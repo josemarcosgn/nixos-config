@@ -130,8 +130,7 @@
   users.users.jose = {
     isNormalUser = true;
     description = "Jose Marcos";
-    extraGroups = [ "networkmanager" "wheel" "adbusers" "docker" ];
-    shell = pkgs.zsh; # Isso também pode ir pro home.nix, mas aqui já funciona.
+    extraGroups = [ "networkmanager" "wheel" "adbusers" "docker" ]
   };
 
   # Allow unfree packages
