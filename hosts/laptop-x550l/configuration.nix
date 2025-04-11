@@ -101,8 +101,7 @@
   virtualisation.docker = {
     enable = true;
     daemon.settings.debug = false;
-    enableNvidia = true;
-  };
+  };	
   
   # Waydroid
   virtualisation.waydroid.enable = true;
