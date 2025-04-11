@@ -83,7 +83,7 @@
       mv = "mv -i";
       rm = "rm -i";
       g = "git";
-      gs = "git status"
+      gs = "git status";
     };
   };
   
