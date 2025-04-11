@@ -1,5 +1,5 @@
 # nvidia-config.nix
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   services.xserver.videoDrivers = [ "nvidia" ];
