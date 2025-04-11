@@ -74,12 +74,13 @@
     gnome-shell-extensions
   ]; 
   
-  # Hidden xterm on GNOME
+  # Hidden xterm  GNOME
   environment.xdgApplications = [
     {
       name = "xterm";
       hidden = true;
-    }
+    };
+  ];
 
   # Configure keymap in X11
   services.xserver.xkb = {
