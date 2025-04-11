@@ -16,8 +16,6 @@
 
   programs.home-manager.enable = true;
   
-  programs.zsh.enable = true;
-  
   home.packages = with pkgs; [
     firefox
     flatpak
@@ -40,7 +38,7 @@
       space-bar
       just-perfection
     ]);
-  
+  	
   dconf = {
     enable = true;
     settings = {
