@@ -17,7 +17,7 @@
   programs.home-manager.enable = true;
   
   programs.zsh.enable = true;
-
+  
   home.packages = with pkgs; [
     firefox
     flatpak
@@ -30,18 +30,16 @@
     wget
     telegram-desktop
     ntfs3g
-  ];
-  
-  home.packages = with pkgs.gnomeExtensions; [
-    blur-my-shell
-    tiling-assistant
-    rounded-window-corners-reborn
-    pano
-    tray-icons-reloaded
-    vitals
-    space-bar
-    just-perfection
-  ];
+    ] ++ (with pkgs.gnomeExtensions; [
+      blur-my-shell
+      tiling-assistant
+      rounded-window-corners-reborn
+      pano
+      tray-icons-reloaded
+      vitals
+      space-bar
+      just-perfection
+    ]);
   
   dconf = {
     enable = true;
