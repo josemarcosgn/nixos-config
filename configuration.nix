@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
@@ -10,30 +6,30 @@
       ./hardware-configuration.nix
     ];
 
-  # Bootloader.
+  # Bootloader & Kernel
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Módulos para Câmera Virtual do OBS
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+  boot.kernelModules = [ "v4l2loopback" ];
+
+  # Networking / Rede
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  # Time Zone & Clock
   time.timeZone = "America/Sao_Paulo";
+  time.hardwareClockInLocalTime = true;
 
-  # Select internationalisation properties.
+  # Internationalisation
   i18n.defaultLocale = "pt_BR.UTF-8";
 
   i18n.extraLocaleSettings = {
+    LC_ALL = "pt_BR.UTF-8";
     LC_ADDRESS = "pt_BR.UTF-8";
     LC_IDENTIFICATION = "pt_BR.UTF-8";
     LC_MEASUREMENT = "pt_BR.UTF-8";
@@ -45,27 +41,42 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+  # Graphics and Hardware Acceleration (Intel Raptor Lake)
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      intel-vaapi-driver
+      libvdpau-va-gl
+    ];
+  };
 
-  # Enable the KDE Plasma Desktop Environment.
+  # Otimização de Bateria e Energia
+  services.tlp.enable = true;
+  services.tlp.settings = {
+    USB_EXCLUDE_BTUSB = 1;
+    USB_DENYLIST = "04f3:0c4b";
+  };
+  services.power-profiles-daemon.enable = false;
+
+  # Graphical Interface (Plasma 6)
+  #services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
-  # Configure keymap in X11
+  # Keyboard Layout
   services.xserver.xkb = {
     layout = "br";
     variant = "";
   };
-
+  
   # Configure console keymap
   console.keyMap = "br-abnt2";
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable sound with pipewire.
+  # Sound with Pipewire
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -75,25 +86,23 @@
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # User Account
   users.users.jose = {
     isNormalUser = true;
     description = "José Marcos";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "libvirtd" ];
     packages = with pkgs; [
       kdePackages.kate
-    #  thunderbird
+      vscodium
     ];
   };
+
+  # Fingerprint Support
+  services.fprintd.enable = true;
+  security.pam.services.login.fprintAuth = true;
+  security.pam.services.sudo.fprintAuth = true;
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -101,42 +110,48 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Enable flakes
+  # Nix Settings (Flakes)
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # System Packages
   environment.systemPackages = with pkgs; [
     git
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    kdePackages.keysmith
+    wget
+    pciutils
+    usbutils
+    htop
+    btop
+    fastfetch
+    virt-manager
+
+    # OBS Studio com plugins específicos
+    (pkgs.wrapOBS {
+      plugins = with pkgs.obs-studio-plugins; [
+        wlrobs
+        obs-vaapi
+        obs-vkcapture
+        obs-gstreamer
+      ];
+    })
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  # Flatpak
+  services.flatpak.enable = true;
 
-  # List services that you want to enable:
+  # Virtualization
+  virtualisation.docker.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      swtpm.enable = true;
+    };
+  };
+  programs.virt-manager.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
+  # NixOS Version
+  system.stateVersion = "25.11";
 
 }
