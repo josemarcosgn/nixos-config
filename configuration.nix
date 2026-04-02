@@ -17,7 +17,7 @@
   boot.kernelModules = [ "v4l2loopback" ];
 
   # Networking / Rede
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "laptop-lenovo"; # Define your hostname.
   # Enable networking
   networking.networkmanager.enable = true;
 
