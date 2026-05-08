@@ -4,6 +4,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../modules/virtualization/intel-gpu-vm.nix # <-- Adicione o caminho correto aqui
     ];
 
   # Bootloader & Kernel
@@ -18,8 +19,14 @@
 
   # Networking / Rede
   networking.hostName = "laptop-lenovo"; # Define your hostname.
-  # Enable networking
-  networking.networkmanager.enable = true;
+
+  # Enable networking and openvpn.
+  networking.networkmanager = {
+    enable = true;
+    plugins = [ pkgs.networkmanager-openvpn ];
+    };
+
+  hardware.bluetooth.enable = true;
 
   # Time Zone & Clock
   time.timeZone = "America/Sao_Paulo";
@@ -41,23 +48,39 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  # Graphics and Hardware Acceleration (Intel Raptor Lake)
-  hardware.graphics = {
+  # --- Otimizações de Memória e Hardware --- 
+
+  # Configuração de ZRAM
+  zramSwap = {
     enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      intel-vaapi-driver
-      libvdpau-va-gl
-    ];
+    priority = 100;
+    memoryPercent = 50; # Usa até 50% da RAM física para o ZRAM
+    algorithm = "zstd"; # Algoritmo de compressão eficiente
   };
 
-  # Otimização de Bateria e Energia
-  services.tlp.enable = true;
-  services.tlp.settings = {
-    USB_EXCLUDE_BTUSB = 1;
-    USB_DENYLIST = "04f3:0c4b";
+  # Configuração de Swap em arquivo (Opcional, mas recomendado como backup)
+  # Se você já tiver uma partição swap, pode remover este bloco.
+  swapDevices = [
+    { 
+      device = "/var/lib/swapfile";
+      size = 16 * 1024;
+    }
+  ];
+
+  # Ativa a atualização de microcode da Intel.
+  hardware.cpu.intel.updateMicrocode = true;
+
+  # Aceleração de Vídeo por Hardware (VA-API) para Intel moderno
+  hardware.graphics = {
+    enable = true;
+    extraPackages = [ pkgs.intel-media-driver ];
   };
-  services.power-profiles-daemon.enable = false;
+  environment.variables.LIBVA_DRIVER_NAME = "iHD";
+
+  # Otimização de Bateria e Energia
+  services.tlp.enable = false; # Desabilitado para usar a integração nativa do KDE.
+  services.power-profiles-daemon.enable = true; # Recomendado para desktops modernos como o KDE Plasma.
+  services.thermald.enable = true; # Gerenciamento térmico da Intel
 
   # Graphical Interface (Plasma 6)
   #services.xserver.enable = true;
@@ -124,6 +147,9 @@
     btop
     fastfetch
     virt-manager
+    gparted
+    rar
+    p7zip
 
     # OBS Studio com plugins específicos
     (pkgs.wrapOBS {
@@ -141,15 +167,6 @@
 
   # Virtualization
   virtualisation.docker.enable = true;
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu = {
-      package = pkgs.qemu_kvm;
-      swtpm.enable = true;
-    };
-  };
-  programs.virt-manager.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
 
   # NixOS Version
   system.stateVersion = "25.11";
