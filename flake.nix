@@ -9,9 +9,11 @@
   outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations = {
       laptop-lenovo = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        # `system` is intentionally omitted: the architecture comes from
+        # `nixpkgs.hostPlatform`, set in hardware-configuration.nix.
+        specialArgs = { inherit inputs; };
         modules = [
-          ./hosts/laptop-lenovo/configuration.nix
+          ./hosts/laptop-lenovo
         ];
       };
     };

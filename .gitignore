@@ -1,0 +1,9 @@
+# Nix build symlinks
+result
+result-*
+
+# Editor swap files
+.*.kate-swp
+*.swp
+*~
+.#*
