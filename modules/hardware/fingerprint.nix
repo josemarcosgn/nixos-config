@@ -1,19 +1,35 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   # Fingerprint Support
-  services.fprintd.enable = true;
+  #
+  # The built-in reader is an ELAN 04f3:0c4b (ThinkPad). Mainline libfprint
+  # binds it to the image-based `elan` driver, which enumerates the device and
+  # even completes enrollment, but never matches: verification failed 5/5 with
+  # "Failed to detect minutiae: No minutiae found" and FPI_IMAGE_DEVICE_STATE
+  # transition errors in the fprintd journal.
+  #
+  # This device needs Lenovo's proprietary TOD (Touch OEM Driver) blob instead.
+  services.fprintd = {
+    enable = true;
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-elan; # unfree; covered by allowUnfree
+    };
+  };
 
   security.pam.services = {
     login.fprintAuth = true;
     sudo.fprintAuth = true;
   };
 
-  # The ELAN 04f3:0c4b reader defaults to USB autosuspend after 2s idle. The
-  # gaps between finger presses during enrollment exceed that, so the device
-  # suspends mid-operation and the driver loses it — reported as
-  # `enroll-disconnected`, with the on-chip template silently discarded.
-  # Pin runtime power management on for this device.
+  # Keep USB runtime power management on for the reader, which otherwise
+  # autosuspends after 2s idle and adds wake latency at the lock screen.
+  #
+  # This was NOT the cause of the matching failure above — kernel logs showed
+  # no USB disconnect for the device at any point — but a biometric sensor
+  # suspending that aggressively is undesirable regardless.
+  #
   # No ACTION match on purpose: with ACTION=="add" the rule only fires on
   # hotplug, so a rebuild leaves an already-connected reader on "auto" until
   # the next reboot. Without it the rule also applies to "change" events,
