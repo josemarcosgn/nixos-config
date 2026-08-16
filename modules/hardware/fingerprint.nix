@@ -3,11 +3,11 @@
 {
   # Fingerprint Support
   #
-  # The built-in reader is an ELAN 04f3:0c4b (ThinkPad). Mainline libfprint
-  # binds it to the image-based `elan` driver, which enumerates the device and
-  # even completes enrollment, but never matches: verification failed 5/5 with
-  # "Failed to detect minutiae: No minutiae found" and FPI_IMAGE_DEVICE_STATE
-  # transition errors in the fprintd journal.
+  # The built-in reader is an ELAN 04f3:0c4b (ThinkBook 16 G8 IRL). Mainline
+  # libfprint binds it to the image-based `elan` driver, which enumerates the
+  # device and even completes enrollment, but never matches: verification
+  # failed 5/5 with "Failed to detect minutiae: No minutiae found" and
+  # FPI_IMAGE_DEVICE_STATE transition errors in the fprintd journal.
   #
   # This device needs Lenovo's proprietary TOD (Touch OEM Driver) blob instead.
   services.fprintd = {
