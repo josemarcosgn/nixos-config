@@ -18,10 +18,9 @@
     };
   };
 
-  security.pam.services = {
-    login.fprintAuth = true;
-    sudo.fprintAuth = true;
-  };
+  # No explicit `security.pam.services.<name>.fprintAuth` is needed: the option
+  # defaults to services.fprintd.enable, so enabling fprintd already wires
+  # pam_fprintd into login, sudo, polkit and the rest.
 
   # Keep USB runtime power management on for the reader, which otherwise
   # autosuspends after 2s idle and adds wake latency at the lock screen.
