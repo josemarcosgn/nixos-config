@@ -70,6 +70,18 @@ Para limpar na hora:
 sudo nix-collect-garbage --delete-older-than 30d
 ```
 
+## Dual boot: relógio
+
+O RTC é mantido em **UTC**. O Windows precisa ser ajustado uma única vez, num
+PowerShell como administrador, senão mostra a hora errada e reescreve o RTC em
+hora local:
+
+```powershell
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" /v RealTimeIsUniversal /t REG_DWORD /d 1 /f
+```
+
+> **Pendente.** Ainda não aplicado no Windows desta máquina.
+
 ## Dependências imperativas
 
 O item de menu do Dolphin "Abrir Claude Code Aqui"

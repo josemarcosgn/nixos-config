@@ -3,9 +3,19 @@
 {
   # Time Zone & Clock
   time.timeZone = "America/Sao_Paulo";
-  # Keep `true` only if this machine dual boots Windows. Without Windows,
-  # drop this line — it causes clock drift.
-  time.hardwareClockInLocalTime = true;
+
+  # The RTC is kept in UTC (the NixOS default — time.hardwareClockInLocalTime
+  # is deliberately not set).
+  #
+  # This machine dual boots Windows, which reads the RTC as local time unless
+  # told otherwise, and rewrites it that way whenever it syncs. Windows must be
+  # switched to UTC, once, from an elevated PowerShell:
+  #
+  #   reg add "HKLM\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" \
+  #     /v RealTimeIsUniversal /t REG_DWORD /d 1 /f
+  #
+  # Until that is done Windows shows the wrong time; Linux recovers on its own
+  # because systemd-timesyncd resyncs over NTP at boot.
 
   # Internationalisation
   i18n.defaultLocale = "pt_BR.UTF-8";
