@@ -4,8 +4,11 @@
   imports = [
     # Result of the hardware scan (do not edit by hand).
     ./hardware-configuration.nix
+    ./vm-variant.nix
 
     ../../modules/core
+    # Desktop-agnostic bits only; the desktop module itself (plasma.nix or
+    # gnome.nix) is appended by flake.nix.
     ../../modules/desktop
     ../../modules/hardware
     ../../modules/programs

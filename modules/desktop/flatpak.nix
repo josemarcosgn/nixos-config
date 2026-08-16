@@ -1,6 +1,6 @@
 { ... }:
 
 {
-  # Flatpak (XDG portals come from the Plasma 6 module)
+  # Flatpak (XDG portals come from whichever desktop module is active)
   services.flatpak.enable = true;
 }
