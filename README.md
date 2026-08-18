@@ -5,8 +5,8 @@ Configuração NixOS declarativa, baseada em Flakes.
 | | |
 |---|---|
 | Máquina | Lenovo ThinkBook 16 G8 IRL (`laptop-lenovo`) |
-| Canal | `nixos-unstable` |
-| Desktop | KDE Plasma 6 + SDDM, ou GNOME + GDM (ambos Wayland) |
+| Canal | `nixos-26.05` (release) |
+| Desktop | KDE Plasma 6 + SDDM, ou GNOME 50 + GDM (ambos Wayland) |
 | Disco | ext4 sobre LUKS, boot EFI |
 
 ## Uso
@@ -26,6 +26,28 @@ sudo nixos-rebuild boot --flake .#laptop-lenovo
 # Atualizar o nixpkgs (regrava o flake.lock)
 nix flake update
 ```
+
+## Canal e upgrade de release
+
+O flake segue o branch de release (`nixos-26.05`), não o `nixos-unstable`. Um
+`nix flake update` traz então só correções e backports do 26.05 — não uma versão
+nova de tudo. Foi essa troca que trouxe o **GNOME 50** (o `nixos-unstable`
+antigo do lock estava no GNOME 49).
+
+Para pular para o próximo release, quando sair, edite o `ref` do input em
+`flake.nix` e regrave o lock:
+
+```bash
+nix flake update            # depois de trocar nixos-26.05 pelo novo ref
+nixos-rebuild dry-build --flake .#laptop-lenovo
+```
+
+Antes disso, leia as release notes — é onde aparecem as opções renomeadas.
+
+> **`system.stateVersion` não acompanha o canal.** Ele registra sob qual release
+> o *estado* da máquina foi criado (aqui, `25.11`) e serve para o NixOS saber
+> como migrar dados de serviços. Subir o canal não é motivo para mexer nele;
+> mudar sem ler as release notes é que quebra o sistema.
 
 ## As duas variantes de desktop
 

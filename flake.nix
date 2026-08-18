@@ -2,8 +2,12 @@
   description = "NixOS System Flake Configuration";
 
   inputs = {
-    # Using nixos-unstable since system.stateVersion is 25.11
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Current NixOS release. Tracking the release branch (not nixos-unstable)
+    # means updates are backported fixes rather than a moving target; the
+    # channel is bumped by hand, once per release, after reading the release
+    # notes. `system.stateVersion` is deliberately NOT tied to this: it records
+    # which release the machine's *state* was created under and stays put.
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
